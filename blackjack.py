@@ -45,24 +45,27 @@ def dealers_play():
         time.sleep(2)
         print("\nDealer's cards:   {}    = {}\n".format((" + ".join(dealer.hand)), dealer.get_hand_value()))
     if dealer.get_hand_value() > 21:
-        print("\nDealer busted. You win!\n")
+        time.sleep(1)
+        print("Dealer busted. You win!\n")
         player_1.money += player_1.bet * 2
     else:
         if player_1.get_hand_value() > dealer.get_hand_value():
-            print("\nYou win!\n")
+            time.sleep(1)
+            print("You win!\n")
             player_1.money += player_1.bet * 2
         elif player_1.get_hand_value() == dealer.get_hand_value():
-            print("\nIt's a tie. How boring...\n")
+            time.sleep(1)
+            print("It's a tie. How boring...\n")
             player_1.money += player_1.bet
         elif player_1.get_hand_value() < dealer.get_hand_value():
-            print("\nYou lose, #sad\n")
+            time.sleep(1)
+            print("You lose, #sad\n")
     return start_turn()
 
 def print_display():
     print("\nDealer's cards:   {}    = {}\n".format((" + ".join(dealer.hand)), dealer.get_hand_value()))
     print("\nYour cards:       {}    = {}\n".format((" + ".join(player_1.hand)), player_1.get_hand_value()))
     
-
 def game_loop():
     while True:
         action = input("\n")
@@ -74,21 +77,21 @@ def game_loop():
                 return start_turn()
         elif action == "d": #double
             player_1.bet *= 2
-            player_1.money -= player_1.bet
+            player_1.money -= player_1.bet/2
             print("Bet: {}                 Cash: $ {}\n".format(player_1.bet, player_1.money))
             player_1.get_card_from_deck()
             time.sleep(1)
-            print_display()
             dealers_play()
         elif action == "s": #stand
-            print_display()
             dealers_play()
         elif action == "e": #exit
             return sys.exit()
                    
 def start_turn():
-    print("You have ${}, please enter your bet: \n".format(player_1.money))
-    player_1.bet = int(input(""))
+    print("You have ${}, please enter your bet: \n".format(int(player_1.money)))
+    player_1.bet = input("")
+    player_1.bet = int(player_1.bet)
+    player_1.money = int(player_1.money)
     player_1.hand = []
     dealer.hand = []
     player_1.get_card_from_deck()
@@ -98,7 +101,21 @@ def start_turn():
     print("\n-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-\n")
     print("\nBet: {}                 Cash: $ {}\n".format(player_1.bet, player_1.money))
     print("Dealer's cards:   {}    = {}\n".format((" + ".join(dealer.hand)), dealer.get_hand_value()))
-    print("Your cards:       {}    = {}\n".format((" + ".join(player_1.hand)), player_1.get_hand_value()))
+    if player_1.get_hand_value() == 21:
+        print("Your cards:       {}    = {}\n".format((" + ".join(player_1.hand)), player_1.get_hand_value()))
+        print("\nBlackjack!")
+        dealer.get_card_from_deck()
+        print("Dealer's cards:   {}    = {}\n".format((" + ".join(dealer.hand)), dealer.get_hand_value()))
+        if dealer.get_hand_value() == 21:
+            print ("\nOMG, it is a tie!")
+            player_1.money += player_1.bet
+            return start_turn()
+        else:
+            print ("\nLucky bastard, you win!")
+            player_1.money += int(1.5 * player_1.bet)
+            return start_turn()
+    else:
+        print("Your cards:       {}    = {}\n".format((" + ".join(player_1.hand)), player_1.get_hand_value()))
     print("To hit press h, to stand press s, to double press d and to exit press e:   ")
     game_loop()
     
