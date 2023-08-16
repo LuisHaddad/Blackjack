@@ -22,9 +22,6 @@ class Player:
                 ace_count -= 1                   
         return value
     
-    def new_turn(self):
-        self.ace_discounted = 0
-    
     def get_card_from_deck(self):
         self.hand.append(deck_1.give_card())
         
